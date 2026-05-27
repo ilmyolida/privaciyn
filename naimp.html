@@ -12,13 +12,19 @@
             padding: 0;
             box-sizing: border-box;
         }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            transition: background 0.3s, color 0.3s;
+            transition: background-color 0.3s ease, color 0.3s ease;
             min-height: 100vh;
             padding: 24px 16px;
         }
-        /* Dark mode */
+
+        /* ---------- DARK ---------- */
         body.dark {
             background: radial-gradient(circle at 10% 20%, #0a2b1e, #071a12);
             color: #e5e7eb;
@@ -45,7 +51,8 @@
             background: rgba(255, 255, 255, 0.08);
             color: #e0e0e0;
         }
-        /* Light mode */
+
+        /* ---------- LIGHT ---------- */
         body.light {
             background: #f0f4fa;
             color: #1e2a2a;
@@ -54,6 +61,7 @@
             background: rgba(255, 255, 255, 0.94);
             backdrop-filter: blur(8px);
             border-color: #b9dfcc;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
         }
         body.light .section {
             background: #ffffffcc;
@@ -72,7 +80,8 @@
             background: #eef2f5;
             color: #2c5a3b;
         }
-        /* Reading mode */
+
+        /* ---------- READING (soft, eye‑friendly) ---------- */
         body.reading {
             background: #fef7e6;
             color: #3b2a1f;
@@ -99,6 +108,8 @@
             background: #f5e6cf;
             color: #7a5a3a;
         }
+
+        /* Umumiy karta */
         .privacy-card {
             max-width: 1000px;
             margin: 0 auto;
@@ -108,6 +119,8 @@
             transition: all 0.3s;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
         }
+
+        /* Header – sarlavha va ikkita tugma */
         .header-row {
             display: flex;
             justify-content: space-between;
@@ -157,11 +170,14 @@
         .mode-btn:hover {
             transform: scale(1.02);
         }
+        /* active holatda (faqat reading tugmasi uchun ishlatamiz) */
         .reading-active {
             background: #e6c27a !important;
             color: #2c1a0a !important;
             box-shadow: 0 0 8px #c9a87b;
         }
+        /* Dark/light tugmasi active emas, oddiy holat */
+
         .update-date {
             text-align: center;
             font-size: 0.8rem;
@@ -173,6 +189,8 @@
             margin-left: auto;
             margin-right: auto;
         }
+
+        /* Til tugmalari */
         .lang-tabs {
             display: flex;
             justify-content: center;
@@ -196,6 +214,8 @@
             transform: translateY(-2px);
             filter: brightness(1.05);
         }
+
+        /* Matn bloklari */
         .section {
             margin-bottom: 24px;
             border-radius: 32px;
@@ -226,6 +246,7 @@
             border-radius: 20px;
             font-weight: 500;
         }
+
         footer {
             margin-top: 45px;
             text-align: center;
@@ -259,14 +280,31 @@
             transform: scale(1.1);
             background: #27ae60;
         }
+
         @media (max-width: 600px) {
-            .privacy-card { padding: 20px 16px; }
-            .section { padding: 16px; }
-            .section h2 { font-size: 1.3rem; }
-            .lang-tab { padding: 6px 18px; font-size: 0.85rem; }
-            h1 { font-size: 1.6rem; }
-            .mode-btn { font-size: 1rem; padding: 6px 12px; }
-            .mode-btn span { display: none; }
+            .privacy-card {
+                padding: 20px 16px;
+            }
+            .section {
+                padding: 16px;
+            }
+            .section h2 {
+                font-size: 1.3rem;
+            }
+            .lang-tab {
+                padding: 6px 18px;
+                font-size: 0.85rem;
+            }
+            h1 {
+                font-size: 1.6rem;
+            }
+            .mode-btn {
+                font-size: 1rem;
+                padding: 6px 12px;
+            }
+            .mode-btn span {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -275,8 +313,10 @@
     <div class="header-row">
         <h1><i class="fas fa-shield-alt"></i> An‑Naim · Maxfiylik siyosati</h1>
         <div class="mode-buttons">
-            <button class="mode-btn" id="darkLightToggle"><i class="fas fa-moon"></i><span> Dark</span></button>
-            <button class="mode-btn" id="readingToggle"><i class="fas fa-book-open"></i><span> Reading</span></button>
+            <!-- Bir tugma: Dark / Light aylantiruvchi -->
+            <button class="mode-btn" id="darkLightToggle" title="Dark / Light"><i class="fas fa-moon"></i><span> Dark</span></button>
+            <!-- Alohida Reading tugmasi -->
+            <button class="mode-btn" id="readingToggle" title="O‘qish rejimi"><i class="fas fa-book-open"></i><span> Reading</span></button>
         </div>
     </div>
     <div class="update-date"><i class="far fa-calendar-alt"></i> 27-may, 2026 | 27 мая 2026 | May 27, 2026</div>
@@ -287,131 +327,170 @@
         <div class="lang-tab" data-lang="en"><i class="fas fa-flag"></i> English</div>
     </div>
 
-    <!-- O'zbek matni (qisqartirilgan, asl uzun matnni o‘rniga qisqa namunaviy – siz to‘liq matnni qo‘shasiz) -->
+    <!-- O‘zbek tili -->
     <div id="pane-uz" class="policy-pane active">
-        <div class="section"><h2><i class="fas fa-circle-info"></i> 1. Umumiy qoidalar</h2><p><strong>An‑Naim</strong> – arab tili uchun offline lug‘at. Hech qanday shaxsiy maʼlumot yig‘ilmaydi.</p></div>
-        <div class="section"><h2><i class="fas fa-envelope"></i> 9. Aloqa</h2><p>safemediaosupport@gmail.com</p></div>
-    </div>
-    <div id="pane-ru" class="policy-pane">
-        <div class="section"><h2><i class="fas fa-circle-info"></i> 1. Общие положения</h2><p>Приложение не собирает данные.</p></div>
-        <div class="section"><h2><i class="fas fa-envelope"></i> 9. Контакты</h2><p>safemediaosupport@gmail.com</p></div>
-    </div>
-    <div id="pane-en" class="policy-pane">
-        <div class="section"><h2><i class="fas fa-circle-info"></i> 1. General</h2><p>No personal data collected.</p></div>
-        <div class="section"><h2><i class="fas fa-envelope"></i> 9. Contact</h2><p>safemediaosupport@gmail.com</p></div>
+        <div class="section"><h2><i class="fas fa-circle-info"></i> 1. Umumiy qoidalar</h2><p><strong>An‑Naim</strong> ilovasi arab tili o‘rganuvchilari uchun yaratilgan <strong>ofﬂayn lug‘at</strong> bo‘lib, unda hech qanday shaxsiy maʼlumot yig‘ilmaydi, qayta ishlanmaydi yoki uchinchi shaxslarga uzatilmaydi. Ilova sizning faoliyatingizni kuzatmaydi, tahlil qilmaydi va reklama ko‘rsatmaydi.</p></div>
+        <div class="section"><h2><i class="fas fa-database"></i> 2. Yig‘iladigan maʼlumotlar</h2><p><span class="highlight">Hech qanday shaxsiy maʼlumot</span> (ism, familiya, elektron pochta, telefon raqami, manzil, IP-manzil, qurilma ID) yig‘ilmaydi. Lug‘at maʼlumotlari va foydalanuvchi tomonidan qo‘shilgan “Sevimlilar” yoki “Tarix” faqat sizning qurilmangizning mahalliy xotirasida saqlanadi. Hech qanday maʼlumot tashqi serverga (Firebase, AWS, Google Cloud va hokazo) yuborilmaydi.</p></div>
+        <div class="section"><h2><i class="fas fa-percent"></i> 3. Ruxsatlar</h2><p>Ilova faqat minimal ruxsatlarni so‘rashi mumkin:</p><ul><li><i class="fas fa-folder-open"></i> <strong>Saqlash (Storage)</strong> – lug‘at bazasini o‘qish va sozlamalarni (masalan, yoqtirilgan so‘zlar) saqlash uchun. Hech qanday fayl yuklanmaydi yoki yuklab olinmaydi.</li></ul><p>Boshqa ruxsatlar (kamera, mikrofon, joylashuv, kontaktlar) <strong>so‘ralmaydi</strong> va ishlatilmaydi.</p></div>
+        <div class="section"><h2><i class="fas fa-plug"></i> 4. Uchinchi tomon xizmatlari</h2><p>Ushbu versiyada <strong>hech qanday</strong> uchinchi tomon xizmatlari (Google Analytics, AdMob, Firebase Analytics, Crashlytics, Facebook SDK va boshqalar) mavjud emas. Shuning uchun sizning maʼlumotlaringiz hech qanday reklama tarmog‘iga yoki tahlil platformasiga oqib ketmaydi.</p></div>
+        <div class="section"><h2><i class="fas fa-lock"></i> 5. Xavfsizlik choralari</h2><p>Barcha maʼlumotlar qurilmangizda mahalliy saqlanganligi uchun ularning xavfsizligi to‘liq qurilmangizning o‘rnatilgan himoya mexanizmlariga (parol, biometrik, shifrlash) bog‘liq. Biz maʼlumotlarni masofadan o‘chirish, o‘zgartirish yoki ko‘rish imkoniyatiga ega emasmiz. Shaxsiy maʼlumotlarni qayta ishlamasligimiz sababli maʼlumotlar oqishi xavfi deyarli nolga teng.</p></div>
+        <div class="section"><h2><i class="fas fa-child"></i> 6. Bolalar maxfiyligi</h2><p>Ilova 16 yoshdan kichik bolalar uchun mo‘ljallanmagan. Biz ongli ravishda bolalardan hech qanday maʼlumot yig‘maymiz. Agar siz ota-ona sifatida farzandingiz ilovadan foydalangan holda maʼlumot yuborganligini aniqlasangiz, darhol biz bilan bog‘laning va biz bunday maʼlumotlarni (agar ular qandaydir tarzda paydo bo‘lgan bo‘lsa) o‘chirib tashlaymiz.</p></div>
+        <div class="section"><h2><i class="fas fa-gavel"></i> 7. Huquqiy asos (GDPR / CCPA)</h2><p>Ilova hech qanday shaxsiy maʼlumot to‘plamagani uchun GDPR (Yevropa Ittifoqi) va CCPA (Kaliforniya) talablari avtomatik ravishda bajarilgan hisoblanadi. Sizning maʼlumotlaringiz yo‘qligi sababli ularni ko‘chirish, o‘chirish yoki tuzatish talabi qo‘llanilmaydi.</p></div>
+        <div class="section"><h2><i class="fas fa-edit"></i> 8. Maxfiylik siyosatiga o‘zgartirishlar</h2><p>Kelajakda ushbu siyosat yangilanishi mumkin. Muhim o‘zgarishlar bo‘lsa, ushbu sahifadagi sana yangilanadi va ilova yangilanishi bilan foydalanuvchilarga yetkaziladi. Joriy versiyadan foydalanish orqali siz ushbu siyosat shartlarini qabul qilasiz.</p></div>
+        <div class="section"><h2><i class="fas fa-envelope"></i> 9. Aloqa</h2><p>Agar sizda ushbu maxfiylik siyosati yoki ilovaning maʼlumotlar bilan ishlashi haqida savollaringiz bo‘lsa, biz bilan bog‘laning:<br><strong><i class="fas fa-at"></i> safemediaosupport@gmail.com</strong><br>Javob berish uchun 7 ish kunigacha vaqt olishimiz mumkin.</p></div>
     </div>
 
-    <footer><i class="fas fa-mobile-alt"></i> An‑Naim · Offline Dictionary | <i class="far fa-heart"></i> Maxfiylik kafolatlangan</footer>
+    <!-- Rus tili -->
+    <div id="pane-ru" class="policy-pane">
+        <div class="section"><h2><i class="fas fa-circle-info"></i> 1. Общие положения</h2><p><strong>An‑Naim</strong> — это офлайн‑словарь для изучающих арабский язык. Приложение <strong>не собирает, не хранит и не передаёт</strong> личные данные пользователей. Нет отслеживания, аналитики или рекламы.</p></div>
+        <div class="section"><h2><i class="fas fa-database"></i> 2. Какие данные собираются?</h2><p><span class="highlight">Никакие</span> персональные данные (имя, email, телефон, IP‑адрес, ID устройства) не собираются. Данные словаря, «Избранное» и «История» хранятся только локально на вашем устройстве. Никакая информация не отправляется на внешние серверы.</p></div>
+        <div class="section"><h2><i class="fas fa-percent"></i> 3. Разрешения</h2><p>Приложение может запросить минимальное разрешение:<br><strong>Доступ к хранилищу</strong> – для чтения словарной базы и сохранения настроек. Другие разрешения (камера, микрофон, геолокация) <strong>не требуются</strong>.</p></div>
+        <div class="section"><h2><i class="fas fa-plug"></i> 4. Сторонние сервисы</h2><p>В текущей версии <strong>отсутствуют</strong> любые сторонние SDK (Google Analytics, AdMob, Firebase, Crashlytics и др.). Ваши данные не передаются рекламным сетям или аналитическим платформам.</p></div>
+        <div class="section"><h2><i class="fas fa-lock"></i> 5. Безопасность</h2><p>Все данные остаются на вашем устройстве. Их защита зависит от встроенных механизмов безопасности вашего устройства. Мы не имеем удалённого доступа к вашим данным и не можем их изменить или удалить.</p></div>
+        <div class="section"><h2><i class="fas fa-child"></i> 6. Дети</h2><p>Приложение не предназначено для лиц младше 16 лет. Мы не собираем данные несовершеннолетних сознательно.</p></div>
+        <div class="section"><h2><i class="fas fa-gavel"></i> 7. Правовые основания (GDPR / CCPA)</h2><p>Поскольку персональные данные не обрабатываются, требования GDPR и CCPA автоматически соблюдены. Вы можете быть уверены, что ваша приватность не нарушается.</p></div>
+        <div class="section"><h2><i class="fas fa-edit"></i> 8. Изменения политики</h2><p>Политика может обновляться. При изменениях дата на этой странице будет меняться. Использование приложения означает согласие с текущей версией.</p></div>
+        <div class="section"><h2><i class="fas fa-envelope"></i> 9. Контакты</h2><p>Вопросы и предложения: <strong>safemediaosupport@gmail.com</strong></p></div>
+    </div>
+
+    <!-- Ingliz tili -->
+    <div id="pane-en" class="policy-pane">
+        <div class="section"><h2><i class="fas fa-circle-info"></i> 1. General</h2><p><strong>An‑Naim</strong> is an offline Arabic dictionary for language learners. It does <strong>not collect, store, or share</strong> any personal information. No tracking, analytics, or ads.</p></div>
+        <div class="section"><h2><i class="fas fa-database"></i> 2. Information collection</h2><p><span class="highlight">No personal data</span> (name, email, phone, IP address, device ID) is collected. Dictionary data, Favorites and History are stored only locally on your device. No data is sent to any external servers.</p></div>
+        <div class="section"><h2><i class="fas fa-percent"></i> 3. Permissions</h2><p>The app may request minimal permission: <strong>Storage access</strong> – to read the dictionary database and save preferences. Other permissions (camera, microphone, location) are <strong>never requested</strong>.</p></div>
+        <div class="section"><h2><i class="fas fa-plug"></i> 4. Third‑party services</h2><p>This version contains <strong>no third‑party SDKs</strong> (Google Analytics, AdMob, Firebase, Crashlytics, etc.). Your data never reaches any ad network or analytic platform.</p></div>
+        <div class="section"><h2><i class="fas fa-lock"></i> 5. Security</h2><p>All data stays on your device. Its security depends entirely on your device’s built‑in protection (password, encryption). We have no remote access to your data.</p></div>
+        <div class="section"><h2><i class="fas fa-child"></i> 6. Children’s privacy</h2><p>The app is not intended for children under 16. We do not knowingly collect personal information from minors.</p></div>
+        <div class="section"><h2><i class="fas fa-gavel"></i> 7. Legal basis (GDPR / CCPA)</h2><p>Since no personal data is processed, GDPR and CCPA requirements are automatically fulfilled. Your privacy is fully respected.</p></div>
+        <div class="section"><h2><i class="fas fa-edit"></i> 8. Changes to this policy</h2><p>We may update this policy occasionally. The “last updated” date will change. Continued use of the app implies acceptance of the current policy.</p></div>
+        <div class="section"><h2><i class="fas fa-envelope"></i> 9. Contact</h2><p>Questions? Write to us: <strong>safemediaosupport@gmail.com</strong></p></div>
+    </div>
+
+    <footer>
+        <i class="fas fa-mobile-alt"></i> An‑Naim · Offline Arabic Dictionary | <i class="far fa-heart"></i> Hech qanday maʼlumot yig‘ilmaydi
+    </footer>
 </div>
-<button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
+<button class="back-to-top" id="backToTop" title="Yuqoriga"><i class="fas fa-arrow-up"></i></button>
 
 <script>
-    (function(){
-        // DOM elementlari
-        const body = document.body;
-        const darkLightBtn = document.getElementById('darkLightToggle');
-        const readingBtn = document.getElementById('readingToggle');
-        const langTabs = document.querySelectorAll('.lang-tab');
-        const panes = {
-            uz: document.getElementById('pane-uz'),
-            ru: document.getElementById('pane-ru'),
-            en: document.getElementById('pane-en')
-        };
-        const backBtn = document.getElementById('backToTop');
+    // ===================== DARK / LIGHT TOGGLE (bitta tugma) =====================
+    const body = document.body;
+    const darkLightToggle = document.getElementById('darkLightToggle');
+    const readingToggle = document.getElementById('readingToggle');
+    const iconSpan = darkLightToggle.querySelector('i');
+    const textSpan = darkLightToggle.querySelector('span');
 
-        let lastNonReading = localStorage.getItem('lastNonReading') || 'dark';
+    // Saqlangan tema (agar reading bo‘lsa, asl dark/light ni saqlaymiz)
+    let lastNonReadingTheme = localStorage.getItem('lastNonReading') || 'dark';
 
-        // Tema qo‘llash funksiyasi
-        function setTheme(theme, isReading = false) {
-            if (isReading) {
-                body.classList.remove('dark', 'light', 'reading');
-                body.classList.add('reading');
-                readingBtn.classList.add('reading-active');
-                localStorage.setItem('privacy_theme', 'reading');
-            } else {
-                body.classList.remove('reading');
-                readingBtn.classList.remove('reading-active');
-                body.classList.remove('dark', 'light');
-                body.classList.add(theme);
-                lastNonReading = theme;
-                localStorage.setItem('lastNonReading', theme);
-                localStorage.setItem('privacy_theme', theme);
-                // Dark/Light tugmasi ikonkasini yangilash
-                const icon = darkLightBtn.querySelector('i');
-                const span = darkLightBtn.querySelector('span');
-                if (theme === 'dark') {
-                    icon.className = 'fas fa-moon';
-                    span.innerText = ' Dark';
-                } else {
-                    icon.className = 'fas fa-sun';
-                    span.innerText = ' Light';
-                }
-            }
-        }
-
-        // Boshlang‘ich holat
-        const savedTheme = localStorage.getItem('privacy_theme');
-        if (savedTheme === 'reading') {
-            const savedLast = localStorage.getItem('lastNonReading');
-            if (savedLast === 'light') lastNonReading = 'light';
-            else lastNonReading = 'dark';
-            setTheme(lastNonReading, false);
-            setTheme('reading', true);
-        } else if (savedTheme === 'light') {
-            setTheme('light', false);
+    function applyTheme(theme, isReading = false) {
+        if (isReading) {
+            body.classList.remove('dark', 'light');
+            body.classList.add('reading');
+            readingToggle.classList.add('reading-active');
+            // Toggle tugmasining ichki ko‘rinishini o‘zgartirmaymiz, faqat ikonka lastNonReadingTheme ga mos qoladi
+            // Ammo foydalanuvchi dark/light tugmasini bossa, reading o‘chib, dark/light ga o‘tadi
         } else {
-            setTheme('dark', false);
-        }
-
-        // Dark/Light tugmasi
-        darkLightBtn.addEventListener('click', () => {
-            // Agar reading holatda bo‘lsa, avval readingni o‘chir
-            if (body.classList.contains('reading')) {
-                setTheme(lastNonReading, false);
-            }
-            const nowDark = body.classList.contains('dark');
-            setTheme(nowDark ? 'light' : 'dark', false);
-        });
-
-        // Reading tugmasi
-        readingBtn.addEventListener('click', () => {
-            if (body.classList.contains('reading')) {
-                // Readingdan chiqish
-                setTheme(lastNonReading, false);
+            body.classList.remove('reading');
+            readingToggle.classList.remove('reading-active');
+            body.classList.remove('dark', 'light');
+            body.classList.add(theme);
+            lastNonReadingTheme = theme;
+            localStorage.setItem('lastNonReading', theme);
+            // Toggle tugmasi ikonkasini yangilash
+            if (theme === 'dark') {
+                iconSpan.className = 'fas fa-moon';
+                textSpan.innerText = ' Dark';
             } else {
-                // Hozirgi dark/light ni eslab, readingga o‘tish
-                const current = body.classList.contains('dark') ? 'dark' : 'light';
-                lastNonReading = current;
-                localStorage.setItem('lastNonReading', current);
-                setTheme('reading', true);
+                iconSpan.className = 'fas fa-sun';
+                textSpan.innerText = ' Light';
             }
-        });
-
-        // Til almashtirish
-        function activateLanguage(lang) {
-            if (!panes[lang]) return;
-            Object.values(panes).forEach(p => p.classList.remove('active'));
-            panes[lang].classList.add('active');
-            langTabs.forEach(tab => {
-                tab.classList.remove('active');
-                if (tab.getAttribute('data-lang') === lang) tab.classList.add('active');
-            });
         }
+        localStorage.setItem('privacy_theme', isReading ? 'reading' : theme);
+    }
 
+    // Boshlang‘ich holat: saqlangan yoki dark
+    const saved = localStorage.getItem('privacy_theme');
+    if (saved === 'reading') {
+        // reading holatda, lekin lastNonReadingTheme ni eslab qolish kerak
+        const savedLast = localStorage.getItem('lastNonReading');
+        if (savedLast && (savedLast === 'dark' || savedLast === 'light')) {
+            lastNonReadingTheme = savedLast;
+        } else {
+            lastNonReadingTheme = 'dark';
+        }
+        applyTheme(lastNonReadingTheme, false);
+        applyTheme('reading', true);
+    } else if (saved === 'light') {
+        applyTheme('light', false);
+    } else {
+        applyTheme('dark', false);
+    }
+
+    // Dark/Light tugmasi: agar reading bo‘lsa, avval readingni o‘chiradi, so‘ng dark/light ni o‘zgartirib qo‘yadi
+    darkLightToggle.addEventListener('click', () => {
+        // Agar hozir reading rejimi aktiv bo‘lsa, avval uni o‘chirib, so‘ng toggle qilamiz
+        if (body.classList.contains('reading')) {
+            // Readingni o‘chir, lastNonReadingTheme ga o‘t
+            applyTheme(lastNonReadingTheme, false);
+        }
+        // Endi dark yoki light ni toggle qilish
+        const currentTheme = body.classList.contains('dark') ? 'dark' : 'light';
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        applyTheme(newTheme, false);
+    });
+
+    // Reading tugmasi: bosganda reading ga o‘tadi, yana bossangiz oldingi dark/light ga qaytadi
+    readingToggle.addEventListener('click', () => {
+        if (body.classList.contains('reading')) {
+            // Readingdan chiqish, oldingi dark/light ga qaytish
+            applyTheme(lastNonReadingTheme, false);
+        } else {
+            // Hozirgi dark/light ni saqlab, reading ga o‘tish
+            const current = body.classList.contains('dark') ? 'dark' : 'light';
+            lastNonReadingTheme = current;
+            localStorage.setItem('lastNonReading', current);
+            applyTheme('reading', true);
+        }
+    });
+
+    // ===================== TIL ALMASHTIRISH (to‘g‘rilangan) =====================
+    const langTabs = document.querySelectorAll('.lang-tab');
+    const panes = {
+        uz: document.getElementById('pane-uz'),
+        ru: document.getElementById('pane-ru'),
+        en: document.getElementById('pane-en')
+    };
+
+    function activateLanguage(lang) {
+        Object.values(panes).forEach(pane => pane.classList.remove('active'));
+        panes[lang].classList.add('active');
         langTabs.forEach(tab => {
-            tab.addEventListener('click', (e) => {
-                const lang = tab.getAttribute('data-lang');
-                if (lang && panes[lang]) activateLanguage(lang);
-            });
+            tab.classList.remove('active');
+            if (tab.getAttribute('data-lang') === lang) tab.classList.add('active');
         });
+    }
 
-        // Back to top
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) backBtn.classList.add('visible');
-            else backBtn.classList.remove('visible');
+    langTabs.forEach(tab => {
+        tab.addEventListener('click', (e) => {
+            const lang = tab.getAttribute('data-lang');
+            if (lang && panes[lang]) activateLanguage(lang);
         });
-        backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-    })();
+    });
+
+    // ===================== BACK TO TOP =====================
+    const backBtn = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            backBtn.classList.add('visible');
+        } else {
+            backBtn.classList.remove('visible');
+        }
+    });
+    backBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 </script>
 </body>
-    </html>
+</html>
