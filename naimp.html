@@ -7,13 +7,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
             font-family: 'Inter', sans-serif;
             transition: background 0.3s, color 0.3s;
             min-height: 100vh;
             padding: 24px 16px;
         }
+        /* Dark mode */
         body.dark {
             background: radial-gradient(circle at 10% 20%, #0a2b1e, #071a12);
             color: #e5e7eb;
@@ -36,15 +41,11 @@
             background: #2ecc71;
             color: #0a1f15;
         }
-        body.dark .theme-btn {
+        body.dark .mode-btn {
             background: rgba(255, 255, 255, 0.08);
             color: #e0e0e0;
         }
-        body.dark .theme-btn.active {
-            background: #2ecc71;
-            color: #0a1f15;
-            box-shadow: 0 0 8px #2ecc71;
-        }
+        /* Light mode */
         body.light {
             background: #f0f4fa;
             color: #1e2a2a;
@@ -53,7 +54,6 @@
             background: rgba(255, 255, 255, 0.94);
             backdrop-filter: blur(8px);
             border-color: #b9dfcc;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
         }
         body.light .section {
             background: #ffffffcc;
@@ -68,14 +68,11 @@
             background: #2ecc71;
             color: white;
         }
-        body.light .theme-btn {
+        body.light .mode-btn {
             background: #eef2f5;
             color: #2c5a3b;
         }
-        body.light .theme-btn.active {
-            background: #2ecc71;
-            color: white;
-        }
+        /* Reading mode */
         body.reading {
             background: #fef7e6;
             color: #3b2a1f;
@@ -98,14 +95,9 @@
             background: #e6c27a;
             color: #2c1a0a;
         }
-        body.reading .theme-btn {
+        body.reading .mode-btn {
             background: #f5e6cf;
             color: #7a5a3a;
-        }
-        body.reading .theme-btn.active {
-            background: #e6c27a;
-            color: #2c1a0a;
-            box-shadow: 0 0 8px #c9a87b;
         }
         .privacy-card {
             max-width: 1000px;
@@ -142,28 +134,33 @@
             background: linear-gradient(135deg, #8b6b3d, #c9a87b);
             -webkit-background-clip: text;
         }
-        .theme-buttons {
+        .mode-buttons {
             display: flex;
-            gap: 12px;
+            gap: 15px;
         }
-        .theme-btn {
+        .mode-btn {
             border: none;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             cursor: pointer;
-            padding: 10px 16px;
+            padding: 10px 18px;
             border-radius: 60px;
             transition: 0.2s;
             backdrop-filter: blur(4px);
             font-weight: 500;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
-        .theme-btn span {
+        .mode-btn span {
             font-size: 0.85rem;
         }
-        .theme-btn:hover {
-            transform: scale(1.05);
+        .mode-btn:hover {
+            transform: scale(1.02);
+        }
+        .reading-active {
+            background: #e6c27a !important;
+            color: #2c1a0a !important;
+            box-shadow: 0 0 8px #c9a87b;
         }
         .update-date {
             text-align: center;
@@ -198,13 +195,6 @@
         .lang-tab:hover:not(.active) {
             transform: translateY(-2px);
             filter: brightness(1.05);
-        }
-        /* MUHIM: policy-pane boshlang'ich holatda yashirin */
-        .policy-pane {
-            display: none;
-        }
-        .policy-pane.active {
-            display: block;
         }
         .section {
             margin-bottom: 24px;
@@ -275,8 +265,8 @@
             .section h2 { font-size: 1.3rem; }
             .lang-tab { padding: 6px 18px; font-size: 0.85rem; }
             h1 { font-size: 1.6rem; }
-            .theme-btn { font-size: 1.2rem; padding: 6px 12px; }
-            .theme-btn span { display: none; }
+            .mode-btn { font-size: 1rem; padding: 6px 12px; }
+            .mode-btn span { display: none; }
         }
     </style>
 </head>
@@ -284,10 +274,9 @@
 <div class="privacy-card">
     <div class="header-row">
         <h1><i class="fas fa-shield-alt"></i> An‑Naim · Maxfiylik siyosati</h1>
-        <div class="theme-buttons">
-            <button class="theme-btn" id="darkBtn" title="Tungi rejim"><i class="fas fa-moon"></i><span> Dark</span></button>
-            <button class="theme-btn" id="lightBtn" title="Yorug‘ rejim"><i class="fas fa-sun"></i><span> Light</span></button>
-            <button class="theme-btn" id="readingBtn" title="O‘qish rejimi"><i class="fas fa-book-open"></i><span> Reading</span></button>
+        <div class="mode-buttons">
+            <button class="mode-btn" id="darkLightToggle"><i class="fas fa-moon"></i><span> Dark</span></button>
+            <button class="mode-btn" id="readingToggle"><i class="fas fa-book-open"></i><span> Reading</span></button>
         </div>
     </div>
     <div class="update-date"><i class="far fa-calendar-alt"></i> 27-may, 2026 | 27 мая 2026 | May 27, 2026</div>
@@ -298,7 +287,7 @@
         <div class="lang-tab" data-lang="en"><i class="fas fa-flag"></i> English</div>
     </div>
 
-    <!-- O‘zbek tili -->
+    <!-- O‘zbek tili to‘liq -->
     <div id="pane-uz" class="policy-pane active">
         <div class="section"><h2><i class="fas fa-circle-info"></i> 1. Umumiy qoidalar</h2><p><strong>An‑Naim</strong> ilovasi arab tili o‘rganuvchilari uchun yaratilgan <strong>ofﬂayn lug‘at</strong> bo‘lib, unda hech qanday shaxsiy maʼlumot yig‘ilmaydi, qayta ishlanmaydi yoki uchinchi shaxslarga uzatilmaydi. Ilova sizning faoliyatingizni kuzatmaydi, tahlil qilmaydi va reklama ko‘rsatmaydi.</p></div>
         <div class="section"><h2><i class="fas fa-database"></i> 2. Yig‘iladigan maʼlumotlar</h2><p><span class="highlight">Hech qanday shaxsiy maʼlumot</span> (ism, familiya, elektron pochta, telefon raqami, manzil, IP-manzil, qurilma ID) yig‘ilmaydi. Lug‘at maʼlumotlari va foydalanuvchi tomonidan qo‘shilgan “Sevimlilar” yoki “Tarix” faqat sizning qurilmangizning mahalliy xotirasida saqlanadi. Hech qanday maʼlumot tashqi serverga (Firebase, AWS, Google Cloud va hokazo) yuborilmaydi.</p></div>
@@ -311,7 +300,7 @@
         <div class="section"><h2><i class="fas fa-envelope"></i> 9. Aloqa</h2><p>Agar sizda ushbu maxfiylik siyosati yoki ilovaning maʼlumotlar bilan ishlashi haqida savollaringiz bo‘lsa, biz bilan bog‘laning:<br><strong><i class="fas fa-at"></i> safemediaosupport@gmail.com</strong><br>Javob berish uchun 7 ish kunigacha vaqt olishimiz mumkin.</p></div>
     </div>
 
-    <!-- Rus tili -->
+    <!-- Rus tili to‘liq -->
     <div id="pane-ru" class="policy-pane">
         <div class="section"><h2><i class="fas fa-circle-info"></i> 1. Общие положения</h2><p><strong>An‑Naim</strong> — это офлайн‑словарь для изучающих арабский язык. Приложение <strong>не собирает, не хранит и не передаёт</strong> личные данные пользователей. Нет отслеживания, аналитики или рекламы.</p></div>
         <div class="section"><h2><i class="fas fa-database"></i> 2. Какие данные собираются?</h2><p><span class="highlight">Никакие</span> персональные данные (имя, email, телефон, IP‑адрес, ID устройства) не собираются. Данные словаря, «Избранное» и «История» хранятся только локально на вашем устройстве. Никакая информация не отправляется на внешние серверы.</p></div>
@@ -324,7 +313,7 @@
         <div class="section"><h2><i class="fas fa-envelope"></i> 9. Контакты</h2><p>Вопросы и предложения: <strong>safemediaosupport@gmail.com</strong></p></div>
     </div>
 
-    <!-- Ingliz tili -->
+    <!-- Ingliz tili to‘liq -->
     <div id="pane-en" class="policy-pane">
         <div class="section"><h2><i class="fas fa-circle-info"></i> 1. General</h2><p><strong>An‑Naim</strong> is an offline Arabic dictionary for language learners. It does <strong>not collect, store, or share</strong> any personal information. No tracking, analytics, or ads.</p></div>
         <div class="section"><h2><i class="fas fa-database"></i> 2. Information collection</h2><p><span class="highlight">No personal data</span> (name, email, phone, IP address, device ID) is collected. Dictionary data, Favorites and History are stored only locally on your device. No data is sent to any external servers.</p></div>
@@ -341,65 +330,104 @@
         <i class="fas fa-mobile-alt"></i> An‑Naim · Offline Arabic Dictionary | <i class="far fa-heart"></i> Hech qanday maʼlumot yig‘ilmaydi
     </footer>
 </div>
-
-<button class="back-to-top" id="backToTop" title="Yuqoriga"><i class="fas fa-arrow-up"></i></button>
+<button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
 
 <script>
-    // ===================== THEME =====================
-    const body = document.body;
-    const darkBtn = document.getElementById('darkBtn');
-    const lightBtn = document.getElementById('lightBtn');
-    const readingBtn = document.getElementById('readingBtn');
+    (function() {
+        const body = document.body;
+        const darkLightToggle = document.getElementById('darkLightToggle');
+        const readingToggle = document.getElementById('readingToggle');
+        const langTabs = document.querySelectorAll('.lang-tab');
+        const panes = {
+            uz: document.getElementById('pane-uz'),
+            ru: document.getElementById('pane-ru'),
+            en: document.getElementById('pane-en')
+        };
+        const backBtn = document.getElementById('backToTop');
 
-    function setTheme(theme) {
-        body.classList.remove('dark', 'light', 'reading');
-        body.classList.add(theme);
-        localStorage.setItem('privacy_theme', theme);
-        [darkBtn, lightBtn, readingBtn].forEach(btn => btn.classList.remove('active'));
-        if (theme === 'dark') darkBtn.classList.add('active');
-        if (theme === 'light') lightBtn.classList.add('active');
-        if (theme === 'reading') readingBtn.classList.add('active');
-    }
+        let lastNonReading = localStorage.getItem('lastNonReading') || 'dark';
 
-    darkBtn.addEventListener('click', () => setTheme('dark'));
-    lightBtn.addEventListener('click', () => setTheme('light'));
-    readingBtn.addEventListener('click', () => setTheme('reading'));
+        function setTheme(theme, isReading = false) {
+            if (isReading) {
+                body.classList.remove('dark', 'light', 'reading');
+                body.classList.add('reading');
+                readingToggle.classList.add('reading-active');
+                localStorage.setItem('privacy_theme', 'reading');
+            } else {
+                body.classList.remove('reading');
+                readingToggle.classList.remove('reading-active');
+                body.classList.remove('dark', 'light');
+                body.classList.add(theme);
+                lastNonReading = theme;
+                localStorage.setItem('lastNonReading', theme);
+                localStorage.setItem('privacy_theme', theme);
+                const icon = darkLightToggle.querySelector('i');
+                const span = darkLightToggle.querySelector('span');
+                if (theme === 'dark') {
+                    icon.className = 'fas fa-moon';
+                    span.innerText = ' Dark';
+                } else {
+                    icon.className = 'fas fa-sun';
+                    span.innerText = ' Light';
+                }
+            }
+        }
 
-    const savedTheme = localStorage.getItem('privacy_theme');
-    if (savedTheme && ['dark', 'light', 'reading'].includes(savedTheme)) setTheme(savedTheme);
-    else setTheme('dark');
+        const saved = localStorage.getItem('privacy_theme');
+        if (saved === 'reading') {
+            const savedLast = localStorage.getItem('lastNonReading');
+            if (savedLast === 'light') lastNonReading = 'light';
+            else lastNonReading = 'dark';
+            setTheme(lastNonReading, false);
+            setTheme('reading', true);
+        } else if (saved === 'light') {
+            setTheme('light', false);
+        } else {
+            setTheme('dark', false);
+        }
 
-    // ===================== TIL =====================
-    const langTabs = document.querySelectorAll('.lang-tab');
-    const panes = {
-        uz: document.getElementById('pane-uz'),
-        ru: document.getElementById('pane-ru'),
-        en: document.getElementById('pane-en')
-    };
+        darkLightToggle.addEventListener('click', () => {
+            if (body.classList.contains('reading')) {
+                setTheme(lastNonReading, false);
+            }
+            const isDark = body.classList.contains('dark');
+            setTheme(isDark ? 'light' : 'dark', false);
+        });
 
-    function activateLanguage(lang) {
-        Object.values(panes).forEach(pane => pane.classList.remove('active'));
-        panes[lang].classList.add('active');
+        readingToggle.addEventListener('click', () => {
+            if (body.classList.contains('reading')) {
+                setTheme(lastNonReading, false);
+            } else {
+                const current = body.classList.contains('dark') ? 'dark' : 'light';
+                lastNonReading = current;
+                localStorage.setItem('lastNonReading', current);
+                setTheme('reading', true);
+            }
+        });
+
+        function activateLanguage(lang) {
+            if (!panes[lang]) return;
+            Object.values(panes).forEach(p => p.classList.remove('active'));
+            panes[lang].classList.add('active');
+            langTabs.forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.getAttribute('data-lang') === lang) tab.classList.add('active');
+            });
+        }
+
         langTabs.forEach(tab => {
-            tab.classList.remove('active');
-            if (tab.getAttribute('data-lang') === lang) tab.classList.add('active');
+            tab.addEventListener('click', (e) => {
+                const lang = tab.getAttribute('data-lang');
+                if (lang && panes[lang]) activateLanguage(lang);
+            });
         });
-    }
 
-    langTabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            const lang = tab.getAttribute('data-lang');
-            if (lang && panes[lang]) activateLanguage(lang);
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) backBtn.classList.add('visible');
+            else backBtn.classList.remove('visible');
         });
-    });
-
-    // ===================== BACK TO TOP =====================
-    const backBtn = document.getElementById('backToTop');
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 300) backBtn.classList.add('visible');
-        else backBtn.classList.remove('visible');
-    });
-    backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    })();
 </script>
 </body>
 </html>
