@@ -19,12 +19,13 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: background-color 0.35s ease, color 0.3s ease;
             min-height: 100vh;
             padding: 24px 16px;
+            position: relative;
         }
 
-        /* ---------- DARK ---------- */
+        /* ========== DARK MODE ========== */
         body.dark {
             background: radial-gradient(circle at 10% 20%, #0a2b1e, #071a12);
             color: #e5e7eb;
@@ -47,12 +48,17 @@
             background: #2ecc71;
             color: #0a1f15;
         }
-        body.dark .mode-btn {
+        body.dark .theme-btn {
             background: rgba(255, 255, 255, 0.08);
             color: #e0e0e0;
         }
+        body.dark .theme-btn.active {
+            background: #2ecc71;
+            color: #0a1f15;
+            box-shadow: 0 0 8px #2ecc71;
+        }
 
-        /* ---------- LIGHT ---------- */
+        /* ========== LIGHT MODE ========== */
         body.light {
             background: #f0f4fa;
             color: #1e2a2a;
@@ -76,12 +82,16 @@
             background: #2ecc71;
             color: white;
         }
-        body.light .mode-btn {
+        body.light .theme-btn {
             background: #eef2f5;
             color: #2c5a3b;
         }
+        body.light .theme-btn.active {
+            background: #2ecc71;
+            color: white;
+        }
 
-        /* ---------- READING (soft, eye‑friendly) ---------- */
+        /* ========== READING MODE (soft, eye‑friendly) ========== */
         body.reading {
             background: #fef7e6;
             color: #3b2a1f;
@@ -104,12 +114,17 @@
             background: #e6c27a;
             color: #2c1a0a;
         }
-        body.reading .mode-btn {
+        body.reading .theme-btn {
             background: #f5e6cf;
             color: #7a5a3a;
         }
+        body.reading .theme-btn.active {
+            background: #e6c27a;
+            color: #2c1a0a;
+            box-shadow: 0 0 8px #c9a87b;
+        }
 
-        /* Umumiy karta */
+        /* Asosiy karta */
         .privacy-card {
             max-width: 1000px;
             margin: 0 auto;
@@ -120,7 +135,7 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
         }
 
-        /* Header – sarlavha va ikkita tugma */
+        /* Header – sarlavha va 3 tugma */
         .header-row {
             display: flex;
             justify-content: space-between;
@@ -147,37 +162,31 @@
             background: linear-gradient(135deg, #8b6b3d, #c9a87b);
             -webkit-background-clip: text;
         }
-        .mode-buttons {
+        .theme-buttons {
             display: flex;
-            gap: 15px;
+            gap: 12px;
         }
-        .mode-btn {
+        .theme-btn {
             border: none;
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             cursor: pointer;
-            padding: 10px 18px;
+            padding: 10px 16px;
             border-radius: 60px;
             transition: 0.2s;
             backdrop-filter: blur(4px);
             font-weight: 500;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
-        .mode-btn span {
+        .theme-btn span {
             font-size: 0.85rem;
         }
-        .mode-btn:hover {
-            transform: scale(1.02);
+        .theme-btn:hover {
+            transform: scale(1.05);
         }
-        /* active holatda (faqat reading tugmasi uchun ishlatamiz) */
-        .reading-active {
-            background: #e6c27a !important;
-            color: #2c1a0a !important;
-            box-shadow: 0 0 8px #c9a87b;
-        }
-        /* Dark/light tugmasi active emas, oddiy holat */
 
+        /* Sana */
         .update-date {
             text-align: center;
             font-size: 0.8rem;
@@ -247,6 +256,7 @@
             font-weight: 500;
         }
 
+        /* Footer va qaytish tugmasi */
         footer {
             margin-top: 45px;
             text-align: center;
@@ -298,11 +308,11 @@
             h1 {
                 font-size: 1.6rem;
             }
-            .mode-btn {
-                font-size: 1rem;
+            .theme-btn {
+                font-size: 1.2rem;
                 padding: 6px 12px;
             }
-            .mode-btn span {
+            .theme-btn span {
                 display: none;
             }
         }
@@ -312,11 +322,10 @@
 <div class="privacy-card">
     <div class="header-row">
         <h1><i class="fas fa-shield-alt"></i> An‑Naim · Maxfiylik siyosati</h1>
-        <div class="mode-buttons">
-            <!-- Bir tugma: Dark / Light aylantiruvchi -->
-            <button class="mode-btn" id="darkLightToggle" title="Dark / Light"><i class="fas fa-moon"></i><span> Dark</span></button>
-            <!-- Alohida Reading tugmasi -->
-            <button class="mode-btn" id="readingToggle" title="O‘qish rejimi"><i class="fas fa-book-open"></i><span> Reading</span></button>
+        <div class="theme-buttons">
+            <button class="theme-btn" id="darkBtn" title="Tungi rejim"><i class="fas fa-moon"></i><span> Dark</span></button>
+            <button class="theme-btn" id="lightBtn" title="Yorug‘ rejim"><i class="fas fa-sun"></i><span> Light</span></button>
+            <button class="theme-btn" id="readingBtn" title="O‘qish rejimi"><i class="fas fa-book-open"></i><span> Reading</span></button>
         </div>
     </div>
     <div class="update-date"><i class="far fa-calendar-alt"></i> 27-may, 2026 | 27 мая 2026 | May 27, 2026</div>
@@ -374,86 +383,33 @@
 <button class="back-to-top" id="backToTop" title="Yuqoriga"><i class="fas fa-arrow-up"></i></button>
 
 <script>
-    // ===================== DARK / LIGHT TOGGLE (bitta tugma) =====================
+    // ===================== THEME (3 ta alohida tugma) =====================
     const body = document.body;
-    const darkLightToggle = document.getElementById('darkLightToggle');
-    const readingToggle = document.getElementById('readingToggle');
-    const iconSpan = darkLightToggle.querySelector('i');
-    const textSpan = darkLightToggle.querySelector('span');
+    const darkBtn = document.getElementById('darkBtn');
+    const lightBtn = document.getElementById('lightBtn');
+    const readingBtn = document.getElementById('readingBtn');
 
-    // Saqlangan tema (agar reading bo‘lsa, asl dark/light ni saqlaymiz)
-    let lastNonReadingTheme = localStorage.getItem('lastNonReading') || 'dark';
-
-    function applyTheme(theme, isReading = false) {
-        if (isReading) {
-            body.classList.remove('dark', 'light');
-            body.classList.add('reading');
-            readingToggle.classList.add('reading-active');
-            // Toggle tugmasining ichki ko‘rinishini o‘zgartirmaymiz, faqat ikonka lastNonReadingTheme ga mos qoladi
-            // Ammo foydalanuvchi dark/light tugmasini bossa, reading o‘chib, dark/light ga o‘tadi
-        } else {
-            body.classList.remove('reading');
-            readingToggle.classList.remove('reading-active');
-            body.classList.remove('dark', 'light');
-            body.classList.add(theme);
-            lastNonReadingTheme = theme;
-            localStorage.setItem('lastNonReading', theme);
-            // Toggle tugmasi ikonkasini yangilash
-            if (theme === 'dark') {
-                iconSpan.className = 'fas fa-moon';
-                textSpan.innerText = ' Dark';
-            } else {
-                iconSpan.className = 'fas fa-sun';
-                textSpan.innerText = ' Light';
-            }
-        }
-        localStorage.setItem('privacy_theme', isReading ? 'reading' : theme);
+    function setTheme(theme) {
+        body.classList.remove('dark', 'light', 'reading');
+        body.classList.add(theme);
+        localStorage.setItem('privacy_theme', theme);
+        // active class for buttons
+        [darkBtn, lightBtn, readingBtn].forEach(btn => btn.classList.remove('active'));
+        if (theme === 'dark') darkBtn.classList.add('active');
+        if (theme === 'light') lightBtn.classList.add('active');
+        if (theme === 'reading') readingBtn.classList.add('active');
     }
 
-    // Boshlang‘ich holat: saqlangan yoki dark
-    const saved = localStorage.getItem('privacy_theme');
-    if (saved === 'reading') {
-        // reading holatda, lekin lastNonReadingTheme ni eslab qolish kerak
-        const savedLast = localStorage.getItem('lastNonReading');
-        if (savedLast && (savedLast === 'dark' || savedLast === 'light')) {
-            lastNonReadingTheme = savedLast;
-        } else {
-            lastNonReadingTheme = 'dark';
-        }
-        applyTheme(lastNonReadingTheme, false);
-        applyTheme('reading', true);
-    } else if (saved === 'light') {
-        applyTheme('light', false);
+    darkBtn.addEventListener('click', () => setTheme('dark'));
+    lightBtn.addEventListener('click', () => setTheme('light'));
+    readingBtn.addEventListener('click', () => setTheme('reading'));
+
+    const savedTheme = localStorage.getItem('privacy_theme');
+    if (savedTheme && ['dark', 'light', 'reading'].includes(savedTheme)) {
+        setTheme(savedTheme);
     } else {
-        applyTheme('dark', false);
+        setTheme('dark');
     }
-
-    // Dark/Light tugmasi: agar reading bo‘lsa, avval readingni o‘chiradi, so‘ng dark/light ni o‘zgartirib qo‘yadi
-    darkLightToggle.addEventListener('click', () => {
-        // Agar hozir reading rejimi aktiv bo‘lsa, avval uni o‘chirib, so‘ng toggle qilamiz
-        if (body.classList.contains('reading')) {
-            // Readingni o‘chir, lastNonReadingTheme ga o‘t
-            applyTheme(lastNonReadingTheme, false);
-        }
-        // Endi dark yoki light ni toggle qilish
-        const currentTheme = body.classList.contains('dark') ? 'dark' : 'light';
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        applyTheme(newTheme, false);
-    });
-
-    // Reading tugmasi: bosganda reading ga o‘tadi, yana bossangiz oldingi dark/light ga qaytadi
-    readingToggle.addEventListener('click', () => {
-        if (body.classList.contains('reading')) {
-            // Readingdan chiqish, oldingi dark/light ga qaytish
-            applyTheme(lastNonReadingTheme, false);
-        } else {
-            // Hozirgi dark/light ni saqlab, reading ga o‘tish
-            const current = body.classList.contains('dark') ? 'dark' : 'light';
-            lastNonReadingTheme = current;
-            localStorage.setItem('lastNonReading', current);
-            applyTheme('reading', true);
-        }
-    });
 
     // ===================== TIL ALMASHTIRISH (to‘g‘rilangan) =====================
     const langTabs = document.querySelectorAll('.lang-tab');
